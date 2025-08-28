@@ -278,16 +278,16 @@ class ChessLike:
 
     def __init__(self):
         self._game_state = "UNFINISHED"
-        self._turn = "TANGERINE"
+        self._turn = "BLUE"
 
         self._board = {
-            "a1":Plane("TANGERINE"),
-            "b1":Train("TANGERINE"),
-            "c1":Helicopter("TANGERINE"),
-            "d1":Bike("TANGERINE"),
-            "e1":Helicopter("TANGERINE"),
-            "f1":Train("TANGERINE"),
-            "g1":Plane("TANGERINE"),
+            "a1":Plane("BLUE"),
+            "b1":Train("BLUE"),
+            "c1":Helicopter("BLUE"),
+            "d1":Bike("BLUE"),
+            "e1":Helicopter("BLUE"),
+            "f1":Train("BLUE"),
+            "g1":Plane("BLUE"),
             "a2":None,
             "b2": None,
             "c2": None,
@@ -323,13 +323,13 @@ class ChessLike:
             "e6": None,
             "f6": None,
             "g6": None,
-            "a7": Plane("AMETHYST"),
-            "b7": Train("AMETHYST"),
-            "c7": Helicopter("AMETHYST"),
-            "d7": Bike("AMETHYST"),
-            "e7": Helicopter("AMETHYST"),
-            "f7": Train("AMETHYST"),
-            "g7": Plane("AMETHYST"),
+            "a7": Plane("ORANGE"),
+            "b7": Train("ORANGE"),
+            "c7": Helicopter("ORANGE"),
+            "d7": Bike("ORANGE"),
+            "e7": Helicopter("ORANGE"),
+            "f7": Train("ORANGE"),
+            "g7": Plane("ORANGE"),
         }
 
     def get_game_state(self):
@@ -354,10 +354,10 @@ class ChessLike:
         """
         Switches the turn to the next player
         """
-        if self._turn == "AMETHYST":
-            self._turn = "TANGERINE"
+        if self._turn == "ORANGE":
+            self._turn = "BLUE"
         else:
-            self._turn = "AMETHYST"
+            self._turn = "ORANGE"
 
 
     def make_move(self, origin, destination):
