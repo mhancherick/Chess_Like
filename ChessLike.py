@@ -1,10 +1,10 @@
-# Description: A program that allows a user to play an animal themed abstract board game called AnimalChess.
+# Description: A program that allows a user to play an transportation themed chesslike board game.
 # The game takes place on a 7x7 grid with 4 different piece types, each with different movement patterns
 
 class Piece:
     """
-    Represents a piece on the AnimalGame game board along with relevant attributes. Acts as the parent class of the
-    specific pieces on the board (Narwhal, Marmoset, Okapi, and Chinchilla)
+    Represents a piece on the ChessLike game board along with relevant attributes. Acts as the parent class of the
+    specific pieces on the board (Plane, Train, Helicopter, and Bike)
     """
     def __init__(self, color, direction, maximum_distance, locomotion, name):
         self._color = color
@@ -35,17 +35,17 @@ class Piece:
         raise NotImplementedError("Subclasses must implement can_move()")
 
 
-class Narwhal(Piece):
+class Plane(Piece):
     """
-    Represents a narwhal piece on the game board and holds the current position of the piece along with the attributes
-    that determine legal moves. Inherits from the Piece class. Interacts with the AnimalGame class.
+    Represents a Plane piece on the game board and holds the current position of the piece along with the attributes
+    that determine legal moves. Inherits from the Piece class. Interacts with the ChessLike class.
     """
     def __init__(self, color):
-        super().__init__(color, "DIAGONAL", 2, "JUMPING", "Narwhal")
+        super().__init__(color, "DIAGONAL", 2, "JUMPING", "Plane")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the narwhal piece can move down the specified path given by the player
+        Determines if the Plane piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -82,18 +82,18 @@ class Narwhal(Piece):
 
 
 
-class Marmoset(Piece):
+class Train(Piece):
     """
-    Represents a marmoset piece on the game board and holds the current position of the piece along with the attributes
-    that determine legal moves. Inherits from the Piece class. Interacts with the AnimalGame class.
+    Represents a Train piece on the game board and holds the current position of the piece along with the attributes
+    that determine legal moves. Inherits from the Piece class. Interacts with the ChessLike class.
     """
 
     def __init__(self, color):
-        super().__init__(color, "DIAGONAL", 4, "SLIDING", "Marmoset")
+        super().__init__(color, "DIAGONAL", 4, "SLIDING", "Train")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the marmoset piece can move down the specified path given by the player
+        Determines if the Train piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -158,18 +158,19 @@ class Marmoset(Piece):
         return True
 
 
-class Okapi(Piece):
+class Bike(Piece):
     """
-    Represents an okapi piece on the game board and holds the current position of the piece along with the attributes
-    that determine legal moves. Inherits from the Piece class. Interacts with the AnimalGame class.
+    Represents a Bike piece on the game board and holds the current position of the piece along with the attributes
+    that determine legal moves. If this piece is captured, the game is over. Inherits from the Piece class.
+    Interacts with the ChessLike class.
     """
 
     def __init__(self, color):
-        super().__init__(color, "ORTHOGONAL", 1, "JUMPING", "Okapi")
+        super().__init__(color, "ORTHOGONAL", 1, "JUMPING", "Bike")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the okapi piece can move down the specified path given by the player
+        Determines if the Bike piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -185,26 +186,24 @@ class Okapi(Piece):
         #the distance a piece moves is the maximum between the x and y deltas
         distance = max(x_delta, y_delta)
 
-        #the okapi can move 1 space in any direction, so there is no path checking
+        #the Bike can move 1 space in any direction, so there is no path checking
         if distance != 1:
             return False
         else:
             return True
-
-
-class Chinchilla(Piece):
+        
+class Helicopter(Piece):
     """
-    Represents a chinchilla piece on the game board and holds the current position of the piece along with the attributes
-    that determine legal moves. If this piece is captured, the game is over. Inherits from the Piece class.
-    Interacts with the AnimalGame class.
+    Represents an Helicopter piece on the game board and holds the current position of the piece along with the attributes
+    that determine legal moves. Inherits from the Piece class. Interacts with the ChessLike class.
     """
 
     def __init__(self, color):
-        super().__init__(color, "ORTHOGONAL", 3, "SLIDING", "Chinchilla")
+        super().__init__(color, "ORTHOGONAL", 3, "SLIDING", "Helicopter")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the chinchilla piece can move down the specified path given by the player
+        Determines if the Helicopter piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -271,7 +270,7 @@ class Chinchilla(Piece):
 
         return True
 
-class AnimalGame:
+class ChessLike:
     """
     Represents a game of Animal Chess. Contains current game state as well as various pieces. Manages turns, validates
     moves, and checks for wins. Utilizes the Piece subclasses for movement rules.
@@ -282,13 +281,13 @@ class AnimalGame:
         self._turn = "TANGERINE"
 
         self._board = {
-            "a1":Narwhal("TANGERINE"),
-            "b1":Marmoset("TANGERINE"),
-            "c1":Okapi("TANGERINE"),
-            "d1":Chinchilla("TANGERINE"),
-            "e1":Okapi("TANGERINE"),
-            "f1":Marmoset("TANGERINE"),
-            "g1":Narwhal("TANGERINE"),
+            "a1":Plane("TANGERINE"),
+            "b1":Train("TANGERINE"),
+            "c1":Helicopter("TANGERINE"),
+            "d1":Bike("TANGERINE"),
+            "e1":Helicopter("TANGERINE"),
+            "f1":Train("TANGERINE"),
+            "g1":Plane("TANGERINE"),
             "a2":None,
             "b2": None,
             "c2": None,
@@ -324,13 +323,13 @@ class AnimalGame:
             "e6": None,
             "f6": None,
             "g6": None,
-            "a7": Narwhal("AMETHYST"),
-            "b7": Marmoset("AMETHYST"),
-            "c7": Okapi("AMETHYST"),
-            "d7": Chinchilla("AMETHYST"),
-            "e7": Okapi("AMETHYST"),
-            "f7": Marmoset("AMETHYST"),
-            "g7": Narwhal("AMETHYST"),
+            "a7": Plane("AMETHYST"),
+            "b7": Train("AMETHYST"),
+            "c7": Helicopter("AMETHYST"),
+            "d7": Bike("AMETHYST"),
+            "e7": Helicopter("AMETHYST"),
+            "f7": Train("AMETHYST"),
+            "g7": Plane("AMETHYST"),
         }
 
     def get_game_state(self):
@@ -400,8 +399,8 @@ class AnimalGame:
         Return: none
         """
 
-        #if the piece being captured is a chinchilla, end the game
-        if isinstance(self._board[destination], Chinchilla):
+        #if the piece being captured is a Bike, end the game
+        if isinstance(self._board[destination], Bike):
             self.game_over()
 
         #moves the piece from the origin to the destination, which removes the opposing player's piece if it
