@@ -4,7 +4,7 @@
 class Piece:
     """
     Represents a piece on the ChessLike game board along with relevant attributes. Acts as the parent class of the
-    specific pieces on the board (Plane, Train, Helicopter, and Bike)
+    specific pieces on the board (Helicopter, Train, Car, and Bike)
     """
     def __init__(self, color, direction, maximum_distance, locomotion, name):
         self._color = color
@@ -35,17 +35,17 @@ class Piece:
         raise NotImplementedError("Subclasses must implement can_move()")
 
 
-class Plane(Piece):
+class Helicopter(Piece):
     """
-    Represents a Plane piece on the game board and holds the current position of the piece along with the attributes
+    Represents a Helicopter piece on the game board and holds the current position of the piece along with the attributes
     that determine legal moves. Inherits from the Piece class. Interacts with the ChessLike class.
     """
     def __init__(self, color):
-        super().__init__(color, "DIAGONAL", 2, "JUMPING", "Plane")
+        super().__init__(color, "DIAGONAL", 2, "JUMPING", "Helicopter")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the Plane piece can move down the specified path given by the player
+        Determines if the Helicopter piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -192,18 +192,18 @@ class Bike(Piece):
         else:
             return True
         
-class Helicopter(Piece):
+class Car(Piece):
     """
-    Represents an Helicopter piece on the game board and holds the current position of the piece along with the attributes
+    Represents an Car piece on the game board and holds the current position of the piece along with the attributes
     that determine legal moves. Inherits from the Piece class. Interacts with the ChessLike class.
     """
 
     def __init__(self, color):
-        super().__init__(color, "ORTHOGONAL", 3, "SLIDING", "Helicopter")
+        super().__init__(color, "ORTHOGONAL", 3, "SLIDING", "Car")
 
     def can_move(self, game, origin, destination):
         """
-        Determines if the Helicopter piece can move down the specified path given by the player
+        Determines if the Car piece can move down the specified path given by the player
         """
 
         #stores origin and destination row/column identifiers in separate variables
@@ -281,13 +281,13 @@ class ChessLike:
         self._turn = "BLUE"
 
         self._board = {
-            "a1":Plane("BLUE"),
+            "a1":Helicopter("BLUE"),
             "b1":Train("BLUE"),
-            "c1":Helicopter("BLUE"),
+            "c1":Car("BLUE"),
             "d1":Bike("BLUE"),
-            "e1":Helicopter("BLUE"),
+            "e1":Car("BLUE"),
             "f1":Train("BLUE"),
-            "g1":Plane("BLUE"),
+            "g1":Helicopter("BLUE"),
             "a2":None,
             "b2": None,
             "c2": None,
@@ -323,13 +323,13 @@ class ChessLike:
             "e6": None,
             "f6": None,
             "g6": None,
-            "a7": Plane("ORANGE"),
+            "a7": Helicopter("ORANGE"),
             "b7": Train("ORANGE"),
-            "c7": Helicopter("ORANGE"),
+            "c7": Car("ORANGE"),
             "d7": Bike("ORANGE"),
-            "e7": Helicopter("ORANGE"),
+            "e7": Car("ORANGE"),
             "f7": Train("ORANGE"),
-            "g7": Plane("ORANGE"),
+            "g7": Helicopter("ORANGE"),
         }
 
     def get_game_state(self):
