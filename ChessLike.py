@@ -272,7 +272,7 @@ class Car(Piece):
 
 class ChessLike:
     """
-    Represents a game of Animal Chess. Contains current game state as well as various pieces. Manages turns, validates
+    Represents a game of Transportation Chess. Contains current game state as well as various pieces. Manages turns, validates
     moves, and checks for wins. Utilizes the Piece subclasses for movement rules.
     """
 
@@ -476,8 +476,8 @@ class ChessLike:
                 piece = self._board.get(column + row)
                 if piece:
                     color = piece.get_color()[0]
-                    animal = piece.get_name()[0]
-                    row_string += color + animal + " "
+                    transport = piece.get_name()[0]
+                    row_string += color + transport + " "
                 else:
                     row_string += "-- "
             print(" "+ row_string)
