@@ -13,6 +13,8 @@ class ChessLikeGUI:
         pygame.init()
         
         self.game = game
+        self.clock = pygame.time.Clock()
+
         
         # Display settings
         self.WINDOW_WIDTH = 800
@@ -35,9 +37,9 @@ class ChessLikeGUI:
         # Set up display
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Transportation Chess")
-        self.clock = pygame.time.Clock()
         icon = pygame.image.load("helicopter.png")
-        pygame.display.set_icon(icon)
+        pygame.display.set_icon(icon)        
+        
         
         # Fonts
         self.title_font = pygame.font.Font(None, 48)
@@ -84,4 +86,32 @@ class ChessLikeGUI:
         pygame.quit()
         sys.exit()
 
+    def draw_board(self):
+        """
+        TODO: Implement
+        """
+        
+        for row in range(1, 8):
+            for column in range(1, 8):
+                
+
+    def pos_to_square(self, column, row):
+        """
+        Converts Pygame column/row notation to board notation
+        """
+        return f"{chr(ord('a') + column)}{7 - row}"
     
+    def square_to_pos(self, square):
+        """
+        Converts board notation to game column/row notation
+        """
+        column = ord(square[0]) - ord('a')
+        row = 7 - int(square[1])
+        return column, row
+    
+    def get_square_from_mouse(self, mouse_position):
+        """
+        
+        """
+
+
