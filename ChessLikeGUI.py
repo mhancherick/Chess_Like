@@ -108,7 +108,7 @@ class ChessLikeGUI:
         pygame.draw.rect(self.screen, (0,0,0), (50, 75, 700, 700), 1)
                 
 
-    def pos_to_square(self, column, row):
+    def pos_to_square(self, row, column):
         """
         Converts Pygame column/row notation to board notation
         """
@@ -129,7 +129,28 @@ class ChessLikeGUI:
         pass
 
     def draw_pieces(self):
-        pass
+        """
+        TODO: Implement
+        """
+
+        for row in range(7):
+            for column in range(7):
+                square = self.pos_to_square(row, column)
+                piece = self.game.get_piece(square)
+                x = column * 100 + 100
+                y = row * 100 + 125
+
+                if piece:
+                    if piece.get_color() == "BLUE":
+                        color = self.BLUE
+                    else:
+                        color = self.ORANGE
+
+                    pygame.draw.circle(self.screen, color, (x, y), 40)
+
+                    # Draw piece letters
+                    text_surface = self.piece_font.render(piece.get_name()[0], True, (0,0,0))
+                    self.screen.blit(text_surface, (x - 10, y - 10))
 
     def draw_ui(self):
         pass
