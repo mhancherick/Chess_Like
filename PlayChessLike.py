@@ -8,4 +8,4 @@ game = ChessLike()
 gui = ChessLikeGUI(game)
 
 # Run the game
-gui.run()
+gui.run_game()

@@ -88,11 +88,24 @@ class ChessLikeGUI:
 
     def draw_board(self):
         """
-        TODO: Implement
+        Draws the board
         """
         
-        for row in range(1, 8):
-            for column in range(1, 8):
+        # Draw the checkerboard
+        for row in range(7):
+            for column in range(7):
+                x = column * 100 + 50
+                y = row * 100 + 75
+
+                if (row + column) % 2 == 0:
+                    color = self.WHITE
+                else:
+                    color = self.BLACK 
+
+                pygame.draw.rect(self.screen, color, (x, y, 100, 100))
+
+        # Draw board outline
+        pygame.draw.rect(self.screen, (0,0,0), (50, 75, 700, 700), 1)
                 
 
     def pos_to_square(self, column, row):
@@ -113,5 +126,12 @@ class ChessLikeGUI:
         """
         
         """
+        pass
 
+    def draw_pieces(self):
+        pass
+
+    def draw_ui(self):
+        pass
+        
 
