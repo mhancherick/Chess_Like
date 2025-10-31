@@ -126,11 +126,43 @@ class ChessLikeGUI:
         """
         
         """
-        pass
+        x, y = mouse_position
+
+        x -= 50
+        y -= 75
+        x = x // 100
+        y = y // 100
+
+        if x < 0 or y < 0 or x > 6 or y > 6:
+            return None
+        else:
+            return self.pos_to_square(y, x)
+
+
+
+
+
+    def handle_click(self, event):
+        """
+        
+        """
+        square = self.get_square_from_mouse(event)
+
+        if square is not None:
+            if self.selected_square is None:
+                piece = self.game.get_piece(square)
+                if piece is not None and piece.get_color() == self.game.get_turn():
+                    self.selected_square = square
+            else:
+                self.game.make_move(self.selected_square, square)
+                self.selected_square = None
+
+
+    
 
     def draw_pieces(self):
         """
-        TODO: Implement
+        Draws the pieces on the board
         """
 
         for row in range(7):
@@ -140,6 +172,7 @@ class ChessLikeGUI:
                 x = column * 100 + 100
                 y = row * 100 + 125
 
+                # Draw colored circles for pieces
                 if piece:
                     if piece.get_color() == "BLUE":
                         color = self.BLUE
