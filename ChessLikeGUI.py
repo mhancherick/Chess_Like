@@ -90,6 +90,8 @@ class ChessLikeGUI:
         """
         Draws the board
         """
+        transparency = pygame.Surface((100, 100), pygame.SRCALPHA)
+        transparency.fill(self.HIGHLIGHT)
         
         # Draw the checkerboard
         for row in range(7):
@@ -104,9 +106,43 @@ class ChessLikeGUI:
 
                 pygame.draw.rect(self.screen, color, (x, y, 100, 100))
 
+                if self.selected_square is not None and self.square_to_pos(self.selected_square) == (column, row):
+                    self.screen.blit(transparency, (x, y))
+
+                elif self.pos_to_square(row, column) in self.valid_moves:
+                    self.screen.blit(transparency, (x, y))
+                    
+
+
         # Draw board outline
         pygame.draw.rect(self.screen, (0,0,0), (50, 75, 700, 700), 1)
+
+    def get_valid_moves(self, origin):
+        """
+        TODO: Write docstring
+        """
+        valid_moves = []
+        piece = self.game.get_piece(origin)
+        
+        if piece is None:
+            return valid_moves
+        
+
+        columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+        rows = ['1', '2', '3', '4', '5', '6', '7']
+        
+        for col in columns:
+            for row in rows:
+                destination = col + row
                 
+                if destination == origin:
+                    continue
+                
+                if self.game.check_destination(destination):
+                    if piece.can_move(self.game, origin, destination):
+                        valid_moves.append(destination)
+        
+        return valid_moves        
 
     def pos_to_square(self, row, column):
         """
@@ -153,9 +189,11 @@ class ChessLikeGUI:
                 piece = self.game.get_piece(square)
                 if piece is not None and piece.get_color() == self.game.get_turn():
                     self.selected_square = square
+                    self.valid_moves = self.get_valid_moves(square)
             else:
                 self.game.make_move(self.selected_square, square)
                 self.selected_square = None
+                self.valid_moves = []
 
 
     
