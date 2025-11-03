@@ -1,2 +1,30 @@
-__pycache__/ChessLike.cpython-313.pyc
-__pycache__/ChessLikeGUI.cpython-313.pyc
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# PyInstaller build files
+build/
+dist/
+*.spec
+*.exe
+*.pkg
+*.dmg

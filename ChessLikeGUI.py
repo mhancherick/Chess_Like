@@ -1,6 +1,3 @@
-# GUI for the ChessLike game built using Pygame
-# Game icons sourced from flaticon.com/free-icons/
-
 import pygame, sys
 from pygame.locals import *
 
@@ -40,8 +37,6 @@ class ChessLikeGUI:
         # Set up display
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         pygame.display.set_caption("Transportation Chess")
-        icon = pygame.image.load("helicopter.png")
-        pygame.display.set_icon(icon)        
         
         
         # Fonts
