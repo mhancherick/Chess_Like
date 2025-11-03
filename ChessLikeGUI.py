@@ -245,5 +245,11 @@ class ChessLikeGUI:
             title_text = self.title_font.render(f"{game_state} WON!", True, win_color)
             title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
             self.screen.blit(title_text, title_rect)
-        
 
+        button_text = self.info_font.render("Rules", True, (0,0,0))
+        self.rules_button_rect = button_text.get_rect(topright=(self.WINDOW_WIDTH - 10, 10))
+        pygame.draw.rect(self.screen, (200, 200, 200), self.rules_button_rect.inflate(10, 5))
+        pygame.draw.rect(self.screen, (0, 0, 0), self.rules_button_rect.inflate(10, 5), 2)
+
+        self.screen.blit(button_text, self.rules_button_rect)
+        
