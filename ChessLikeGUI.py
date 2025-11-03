@@ -32,7 +32,6 @@ class ChessLikeGUI:
         self.BLUE = (70, 130, 180)
         self.ORANGE = (255, 140, 0)
         self.HIGHLIGHT = (144, 238, 144, 128)
-        self.SELECT = (255, 255, 0, 128)
         
         # Set up display
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
@@ -97,7 +96,7 @@ class ChessLikeGUI:
         for row in range(7):
             for column in range(7):
                 x = column * 100 + 50
-                y = row * 100 + 75
+                y = row * 100 + 100
 
                 if (row + column) % 2 == 0:
                     color = self.WHITE
@@ -115,7 +114,7 @@ class ChessLikeGUI:
 
 
         # Draw board outline
-        pygame.draw.rect(self.screen, (0,0,0), (50, 75, 700, 700), 1)
+        pygame.draw.rect(self.screen, (0,0,0), (50, 100, 700, 700), 1)
 
     def get_valid_moves(self, origin):
         """
@@ -208,7 +207,7 @@ class ChessLikeGUI:
                 square = self.pos_to_square(row, column)
                 piece = self.game.get_piece(square)
                 x = column * 100 + 100
-                y = row * 100 + 125
+                y = row * 100 + 150
 
                 # Draw colored circles for pieces
                 if piece:
@@ -224,6 +223,29 @@ class ChessLikeGUI:
                     self.screen.blit(text_surface, (x - 10, y - 10))
 
     def draw_ui(self):
-        pass
+        
+        turn = self.game.get_turn()
+        if turn == "BLUE":
+            color = self.BLUE
+        else:
+            color = self.ORANGE
+
+        if self.game.get_game_state() == "BLUE":
+            win_color = self.BLUE
+        else:
+            win_color = self.ORANGE
+
+        if self.game.get_game_state() == "UNFINISHED":
+            title_text = self.title_font.render("Transportation Chess", True, (0,0,0))
+            title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
+            self.screen.blit(title_text, title_rect)
+
+            turn_text = self.info_font.render(f"{turn}'s turn", True, color)
+            turn_rect = turn_text.get_rect(center=(self.WINDOW_WIDTH // 2, 60))
+            self.screen.blit(turn_text, turn_rect)
+        else:
+            title_text = self.title_font.render(f"{self.game.get_game_state()} WON!", True, win_color)
+            title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
+            self.screen.blit(title_text, title_rect)
         
 

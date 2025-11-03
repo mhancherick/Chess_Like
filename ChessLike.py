@@ -460,7 +460,7 @@ class ChessLike:
         print(f"Congratulations! {self._turn} won the game!")
         print()
 
-        self._game_state = f"{self._turn}_WON"
+        self._game_state = self._turn
 
     def print_board(self):
         """
