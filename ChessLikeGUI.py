@@ -24,6 +24,8 @@ class ChessLikeGUI:
         self.BOARD_OFFSET_X = 50
         self.BOARD_OFFSET_Y = 100
         self.CIRCLE_RADIUS = 40
+        self.POPUP_WIDTH = 600
+        self.POPUP_HEIGHT = 600
         
         # Colors
         self.WHITE = (240, 240, 240)
@@ -33,6 +35,7 @@ class ChessLikeGUI:
         self.BLUE = (70, 130, 180)
         self.ORANGE = (255, 140, 0)
         self.HIGHLIGHT = (144, 238, 144, 128)
+        self.OVERLAY = (0, 0, 0, 220)
         
         # Set up display
         self.screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
@@ -54,6 +57,22 @@ class ChessLikeGUI:
         # UI
         self.rules_button_text = self.info_font.render("Rules", True, (0, 0, 0))
         self.rules_button_rect = self.rules_button_text.get_rect(topright=(self.WINDOW_WIDTH - 10, 10))
+        self.rules_lines = [
+            "Goal: Capture opponent's Bike",
+            "",
+            "Blue goes first. Players alternate turns.",
+            "",
+            "Pieces:",
+            " Bike (B) - Moves 1 square any direction",
+            " Car (C) - Slides up to 3 squares horizontally/vertically",
+            " Train (T) - Slides up to 4 squares diagonally",
+            " Helicopter (H) - Jumps exactly 2 squares diagonally",
+            "",
+            "All pieces can move 1 square in any direction.",
+            "Sliding pieces are blocked by same-color pieces.",
+            "",
+            "Click anywhere to close"
+        ]
 
     def run_game(self):
         """
@@ -83,6 +102,9 @@ class ChessLikeGUI:
             self.draw_board()
             self.draw_pieces()
             self.draw_ui()
+
+            if self.show_rules:
+                self.draw_rules()
             
             pygame.display.flip()
             self.clock.tick(60)
@@ -191,7 +213,6 @@ class ChessLikeGUI:
 
         if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
             self.show_rules = True
-
         elif self.show_rules:
             self.show_rules = False
 
@@ -262,3 +283,28 @@ class ChessLikeGUI:
 
         self.screen.blit(self.rules_button_text, self.rules_button_rect)
         
+    def draw_rules(self):
+        """
+        Draws the rules popup to explain the game to users
+        """
+
+        # Draw transparent overlay over game window
+        transparency = pygame.Surface((self.WINDOW_WIDTH, self.WINDOW_HEIGHT), pygame.SRCALPHA)
+        transparency.fill(self.OVERLAY)
+        self.screen.blit(transparency, (0,0))
+
+        x = (self.WINDOW_WIDTH - self.POPUP_WIDTH) // 2
+        y = (self.WINDOW_HEIGHT - self.POPUP_HEIGHT) // 2
+
+        popup_rect = pygame.Rect(x, y, self.POPUP_WIDTH, self.POPUP_HEIGHT)
+        pygame.draw.rect(self.screen, (255, 255, 255), popup_rect)
+
+        for line_number, line in enumerate(self.rules_lines):
+            line_x = x + 20
+            line_y = y + (line_number * 30) + 10
+
+            text_surface = self.info_font.render(line, True, (0,0,0))
+            self.screen.blit(text_surface, (line_x, line_y))
+
+
+
