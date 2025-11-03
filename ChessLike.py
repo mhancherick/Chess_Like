@@ -341,6 +341,10 @@ class ChessLike:
     def get_piece(self, position):
         """
         Returns the piece at the board position if the position is valid
+
+        :param position: Board notation like "d4"
+
+        :return: Piece object if position valid, None otherwise
         """
         if position in self._board:
             return self._board[position]
@@ -353,6 +357,8 @@ class ChessLike:
     def switch_turn(self):
         """
         Switches the turn to the next player
+
+        :return: None
         """
         if self._turn == "ORANGE":
             self._turn = "BLUE"
@@ -365,8 +371,11 @@ class ChessLike:
         Moves the piece at the origin to the destination. Returns False if the move is invalid, otherwise returns True.
         Updates the current turn after the move has been successfully executed. Utilizes check_origin,
         check_destination, and the piece's can_move for valid move.
-        Parameters: origin, destination
-        Return: True if move is valid, False if move is invalid
+
+        :param origin: Starting square in board notation
+        :param destination: Target square in board notation
+
+        :return: True if move is valid, False if move is invalid
         """
 
         origin = origin.lower()
@@ -395,8 +404,11 @@ class ChessLike:
     def commit_move(self, origin, destination):
         """
         Makes the move specified by the player if the move is valid
-        Parameters: origin, destination
-        Return: none
+
+        :param origin: Starting square in board notation
+        :param destination: Target square in board notation
+
+        :return: None
         """
 
         #if the piece being captured is a Bike, end the game
@@ -411,8 +423,10 @@ class ChessLike:
     def check_origin(self, origin):
         """
         Checks the origin of the move to see if the entered origin is valid. Returns True if so, otherwise returns False
-        Parameters: origin
-        Return: True if origin is valid, False if origin is invalid
+
+        :param origin: Starting square in board notation
+
+        :return: True if origin is valid, False if origin is invalid
         """
 
         if origin not in self._board:
@@ -434,8 +448,10 @@ class ChessLike:
     def check_destination(self, destination):
         """
         Checks the destination to see if the entered destination is valid. Returns True if so, otherwise returns False
-        Parameters: destination
-        Return: True if destination is valid, False if destination is invalid
+
+        :param destination: Target square in board notation
+
+        :return: True if destination is valid, False if destination is invalid
         """
 
         if destination not in self._board:
@@ -456,6 +472,8 @@ class ChessLike:
     def game_over(self):
         """
         Prints a congratulations message and changes the game state to reflect which color won
+
+        :return: None
         """
         print(f"Congratulations! {self._turn} won the game!")
         print()
@@ -464,7 +482,10 @@ class ChessLike:
 
     def print_board(self):
         """
-        Prints the board to the console so the user can see the current state of the board
+        Prints the board to the console so the user can see the current state of the board when playing
+        via CLI
+
+        :return: None
         """
         rows = ["7", "6", "5", "4", "3", "2", "1"]
         columns = ["a", "b", "c", "d", "e", "f", "g"]

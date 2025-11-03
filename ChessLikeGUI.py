@@ -76,7 +76,10 @@ class ChessLikeGUI:
 
     def run_game(self):
         """
-        The main game loop
+        The main game loop. Handles events, updates the game state, and shows the display. 
+        Runs at 60fps until the user closes the window.
+
+        :return: None
         """
 
         running = True
@@ -113,9 +116,116 @@ class ChessLikeGUI:
         pygame.quit()
         sys.exit()
 
+    def get_valid_moves(self, origin):
+        """
+        Determines which squares are valid moves for the selected piece
+
+        :param origin: Square like "d1"
+
+        :return: List of valid destination squares
+        """
+                
+        valid_moves = []
+        piece = self.game.get_piece(origin)
+        
+        if piece is None:
+            return valid_moves
+        
+
+        columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+        rows = ['1', '2', '3', '4', '5', '6', '7']
+        
+        for col in columns:
+            for row in rows:
+                destination = col + row
+                
+                if destination == origin:
+                    continue
+                
+                if self.game.check_destination(destination):
+                    if piece.can_move(self.game, origin, destination):
+                        valid_moves.append(destination)
+        
+        return valid_moves        
+
+    def pos_to_square(self, row, column):
+        """
+        Converts column/row notation to board notation
+
+        :param row: Row index 0-6
+        :param column: Column index 0-6
+
+        :return: Board notation like "a7"
+        """
+        return f"{chr(ord('a') + column)}{7 - row}"
+    
+    def square_to_pos(self, square):
+        """
+        Converts board notation to game column/row notation
+
+        :param square: Board notation like "d4"
+
+        :return: Tuple of (column, row)
+        """
+        column = ord(square[0]) - ord('a')
+        row = 7 - int(square[1])
+        return column, row
+    
+    def get_square_from_mouse(self, mouse_position):
+        """
+        Converts mouse click coordinates to board notation
+
+        :param mouse_position: Tuple of (x, y) pixel coordinates
+
+        :return: Board notation if on board, None otherwise
+        """
+        x, y = mouse_position
+
+        x -= self.BOARD_OFFSET_X
+        y -= self.BOARD_OFFSET_Y
+        x = x // self.SQUARE_SIZE
+        y = y // self.SQUARE_SIZE
+
+        if x < 0 or y < 0 or x > 6 or y > 6:
+            return None
+        else:
+            return self.pos_to_square(y, x)
+
+    def handle_click(self, pos):
+        """
+        Handles click events for all interactive elements of the game
+
+        :param pos: Tuple of (x, y) click coordinates
+
+        :return: None
+        """
+        square = self.get_square_from_mouse(pos)
+
+        if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
+            self.show_rules = True
+            return
+        
+        if self.show_rules:
+            self.show_rules = False
+            return
+
+        if square is not None:
+            if self.selected_square is None:
+                piece = self.game.get_piece(square)
+                if piece is not None and piece.get_color() == self.game.get_turn():
+                    self.selected_square = square
+                    self.valid_moves = self.get_valid_moves(square)
+            else:
+                self.game.make_move(self.selected_square, square)
+                self.selected_square = None
+                self.valid_moves = []
+
     def draw_board(self):
         """
-        Draws the board
+        Draws the checkerboard using alternating colors, along with highlighting valid moves if a user selects
+        a piece to move.
+
+        :return: None
         """
         transparency = pygame.Surface((self.SQUARE_SIZE, self.SQUARE_SIZE), pygame.SRCALPHA)
         transparency.fill(self.HIGHLIGHT)
@@ -144,98 +254,11 @@ class ChessLikeGUI:
         # Draw board outline
         pygame.draw.rect(self.screen, (0,0,0), (self.BOARD_OFFSET_X, self.BOARD_OFFSET_Y, self.BOARD_SIZE, self.BOARD_SIZE), 1)
 
-    def get_valid_moves(self, origin):
-        """
-        Determines which squares are valid moves for the selected piece
-        """
-        valid_moves = []
-        piece = self.game.get_piece(origin)
-        
-        if piece is None:
-            return valid_moves
-        
-
-        columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-        rows = ['1', '2', '3', '4', '5', '6', '7']
-        
-        for col in columns:
-            for row in rows:
-                destination = col + row
-                
-                if destination == origin:
-                    continue
-                
-                if self.game.check_destination(destination):
-                    if piece.can_move(self.game, origin, destination):
-                        valid_moves.append(destination)
-        
-        return valid_moves        
-
-    def pos_to_square(self, row, column):
-        """
-        Converts Pygame column/row notation to board notation
-        """
-        return f"{chr(ord('a') + column)}{7 - row}"
-    
-    def square_to_pos(self, square):
-        """
-        Converts board notation to game column/row notation
-        """
-        column = ord(square[0]) - ord('a')
-        row = 7 - int(square[1])
-        return column, row
-    
-    def get_square_from_mouse(self, mouse_position):
-        """
-        Gets the square from the mouse position
-        """
-        x, y = mouse_position
-
-        x -= self.BOARD_OFFSET_X
-        y -= self.BOARD_OFFSET_Y
-        x = x // self.SQUARE_SIZE
-        y = y // self.SQUARE_SIZE
-
-        if x < 0 or y < 0 or x > 6 or y > 6:
-            return None
-        else:
-            return self.pos_to_square(y, x)
-
-
-
-
-
-    def handle_click(self, pos):
-        """
-        Handles click events by selecting a piece, triggering a move, or showing the rules popup
-        """
-        square = self.get_square_from_mouse(pos)
-
-        if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
-            self.show_rules = True
-            return
-        
-        if self.show_rules:
-            self.show_rules = False
-            return
-
-        if square is not None and not self.show_rules:
-            if self.selected_square is None:
-                piece = self.game.get_piece(square)
-                if piece is not None and piece.get_color() == self.game.get_turn():
-                    self.selected_square = square
-                    self.valid_moves = self.get_valid_moves(square)
-            else:
-                self.game.make_move(self.selected_square, square)
-                self.selected_square = None
-                self.valid_moves = []
-
-
-    
-
     def draw_pieces(self):
         """
         Draws the pieces on the board
+
+        :return: None
         """
 
         for row in range(7):
@@ -260,6 +283,11 @@ class ChessLikeGUI:
                     self.screen.blit(text_surface, text_rect)
 
     def draw_ui(self):
+        """
+        Draws all the UI elements including text and rules button
+
+        :return: None
+        """
         
         turn = self.game.get_turn()
         game_state = self.game.get_game_state()
@@ -289,6 +317,8 @@ class ChessLikeGUI:
     def draw_rules(self):
         """
         Draws the rules popup to explain the game to users
+
+        :return: None
         """
 
         # Draw transparent overlay over game window
@@ -308,6 +338,3 @@ class ChessLikeGUI:
 
             text_surface = self.info_font.render(line, True, (0,0,0))
             self.screen.blit(text_surface, (line_x, line_y))
-
-
-
