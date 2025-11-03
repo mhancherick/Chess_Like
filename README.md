@@ -1,8 +1,8 @@
-Transportation Chess
+**Transportation Chess**
 
 Transportation Chess is a two-player strategy game where you command vehicles on a 7x7 board. To win, capture the opponent's bike (the most powerful of all transportation types).
 
-Rules:
+**Rules:**
 
     Goal: Capture the other player's Bike
 
@@ -10,7 +10,7 @@ Rules:
 
     Moves: The board is set up with standard chess notation - the bottom left square is a1 and the top right square is g7
 
-The Pieces
+**The Pieces**
 
 Note: Any piece can move 1 square in any direction. Sliding pieces can move up to their maximum distance, but jumping pieces must jump exactly their maximum distance. Sliding pieces are blocked by pieces of the same color if they are in its path.
 
@@ -32,16 +32,17 @@ Helicopter
 
     Movement: Jumps exactly two squares diagonally
 
-Installation & Running
+**Installation & Running**
 
-Requirements
-Python 3.x
-pygame
+**Requirements**
 
-Setup
+    Python 3.x
+    pygame
 
-git clone https://github.com/mhancherick/Chess_Like
+**Setup**
 
-pip install pygame
+    git clone https://github.com/mhancherick/Chess_Like
 
-python PlayChessLike.py
+    pip install pygame
+    
+    python PlayChessLike.py
