@@ -1,4 +1,5 @@
 import pygame, sys
+from ChessLike import *
 from pygame.locals import *
 
 class ChessLikeGUI:
@@ -196,6 +197,9 @@ class ChessLikeGUI:
 
         :return: None
         """
+        if self.game.get_game_state() != "UNFINISHED":
+            self.reset()
+
         square = self.get_square_from_mouse(pos)
 
         # Handles click of Rules button
@@ -311,6 +315,11 @@ class ChessLikeGUI:
             title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
             self.screen.blit(title_text, title_rect)
 
+            # Prompts user to start new game
+            restart_text = self.info_font.render("Click anywhere to start a new game", True, (0, 0, 0))
+            restart_rect = restart_text.get_rect(center=(self.WINDOW_WIDTH // 2, 60))
+            self.screen.blit(restart_text, restart_rect)
+
         # Draws the rules button
         pygame.draw.rect(self.screen, (200, 200, 200), self.rules_button_rect.inflate(10, 5))
         pygame.draw.rect(self.screen, (0, 0, 0), self.rules_button_rect.inflate(10, 5), 2)
@@ -341,3 +350,14 @@ class ChessLikeGUI:
 
             text_surface = self.info_font.render(line, True, (0,0,0))
             self.screen.blit(text_surface, (line_x, line_y))
+
+    def reset(self):
+        """
+        Resets all game variables to their original state to start a new game
+
+        :return: None
+        """
+
+        self.game = ChessLike()
+        self.selected_square = None
+        self.valid_moves = []
