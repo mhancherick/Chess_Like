@@ -23,6 +23,7 @@ class ChessLikeGUI:
         self.SQUARE_SIZE = self.BOARD_SIZE // 7
         self.BOARD_OFFSET_X = 50
         self.BOARD_OFFSET_Y = 100
+        self.CIRCLE_RADIUS = 40
         
         # Colors
         self.WHITE = (240, 240, 240)
@@ -48,6 +49,7 @@ class ChessLikeGUI:
         # Game state
         self.selected_square = None
         self.valid_moves = []
+        self.show_rules = False
 
     def run_game(self):
         """
@@ -89,21 +91,21 @@ class ChessLikeGUI:
         """
         Draws the board
         """
-        transparency = pygame.Surface((100, 100), pygame.SRCALPHA)
+        transparency = pygame.Surface((self.SQUARE_SIZE, self.SQUARE_SIZE), pygame.SRCALPHA)
         transparency.fill(self.HIGHLIGHT)
         
         # Draw the checkerboard
         for row in range(7):
             for column in range(7):
-                x = column * 100 + 50
-                y = row * 100 + 100
+                x = column * self.SQUARE_SIZE + self.BOARD_OFFSET_X
+                y = row * self.SQUARE_SIZE + self.BOARD_OFFSET_Y
 
                 if (row + column) % 2 == 0:
                     color = self.WHITE
                 else:
                     color = self.BLACK 
 
-                pygame.draw.rect(self.screen, color, (x, y, 100, 100))
+                pygame.draw.rect(self.screen, color, (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
 
                 if self.selected_square is not None and self.square_to_pos(self.selected_square) == (column, row):
                     self.screen.blit(transparency, (x, y))
@@ -114,11 +116,11 @@ class ChessLikeGUI:
 
 
         # Draw board outline
-        pygame.draw.rect(self.screen, (0,0,0), (50, 100, 700, 700), 1)
+        pygame.draw.rect(self.screen, (0,0,0), (self.BOARD_OFFSET_X, self.BOARD_OFFSET_Y, self.BOARD_SIZE, self.BOARD_SIZE), 1)
 
     def get_valid_moves(self, origin):
         """
-        TODO: Write docstring
+        Determines which squares are valid moves for the selected piece
         """
         valid_moves = []
         piece = self.game.get_piece(origin)
@@ -159,14 +161,14 @@ class ChessLikeGUI:
     
     def get_square_from_mouse(self, mouse_position):
         """
-        
+        Gets the square from the mouse position
         """
         x, y = mouse_position
 
-        x -= 50
-        y -= 75
-        x = x // 100
-        y = y // 100
+        x -= self.BOARD_OFFSET_X
+        y -= self.BOARD_OFFSET_Y
+        x = x // self.SQUARE_SIZE
+        y = y // self.SQUARE_SIZE
 
         if x < 0 or y < 0 or x > 6 or y > 6:
             return None
@@ -177,11 +179,11 @@ class ChessLikeGUI:
 
 
 
-    def handle_click(self, event):
+    def handle_click(self, pos):
         """
-        
+        Handles click events by selecting a piece or triggering a move
         """
-        square = self.get_square_from_mouse(event)
+        square = self.get_square_from_mouse(pos)
 
         if square is not None:
             if self.selected_square is None:
@@ -206,8 +208,8 @@ class ChessLikeGUI:
             for column in range(7):
                 square = self.pos_to_square(row, column)
                 piece = self.game.get_piece(square)
-                x = column * 100 + 100
-                y = row * 100 + 150
+                x = column * self.SQUARE_SIZE + self.BOARD_OFFSET_X + self.SQUARE_SIZE // 2
+                y = row * self.SQUARE_SIZE + self.BOARD_OFFSET_Y + self.SQUARE_SIZE // 2
 
                 # Draw colored circles for pieces
                 if piece:
@@ -216,26 +218,21 @@ class ChessLikeGUI:
                     else:
                         color = self.ORANGE
 
-                    pygame.draw.circle(self.screen, color, (x, y), 40)
+                    pygame.draw.circle(self.screen, color, (x, y), self.CIRCLE_RADIUS)
 
                     # Draw piece letters
                     text_surface = self.piece_font.render(piece.get_name()[0], True, (0,0,0))
-                    self.screen.blit(text_surface, (x - 10, y - 10))
+                    text_rect = text_surface.get_rect(center=(x, y))
+                    self.screen.blit(text_surface, text_rect)
 
     def draw_ui(self):
         
         turn = self.game.get_turn()
-        if turn == "BLUE":
-            color = self.BLUE
-        else:
-            color = self.ORANGE
+        game_state = self.game.get_game_state()
 
-        if self.game.get_game_state() == "BLUE":
-            win_color = self.BLUE
-        else:
-            win_color = self.ORANGE
+        color = self.BLUE if turn == "BLUE" else self.ORANGE
 
-        if self.game.get_game_state() == "UNFINISHED":
+        if game_state == "UNFINISHED":
             title_text = self.title_font.render("Transportation Chess", True, (0,0,0))
             title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
             self.screen.blit(title_text, title_rect)
@@ -244,7 +241,8 @@ class ChessLikeGUI:
             turn_rect = turn_text.get_rect(center=(self.WINDOW_WIDTH // 2, 60))
             self.screen.blit(turn_text, turn_rect)
         else:
-            title_text = self.title_font.render(f"{self.game.get_game_state()} WON!", True, win_color)
+            win_color = self.BLUE if game_state == "BLUE" else self.ORANGE
+            title_text = self.title_font.render(f"{game_state} WON!", True, win_color)
             title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
             self.screen.blit(title_text, title_rect)
         
