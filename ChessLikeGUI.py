@@ -101,6 +101,7 @@ class ChessLikeGUI:
             self.draw_pieces()
             self.draw_ui()
 
+            # Draws rule overlay
             if self.show_rules:
                 self.draw_rules()
             
@@ -137,6 +138,7 @@ class ChessLikeGUI:
                 if destination == origin:
                     continue
                 
+                # Uses ChessLike functions to check validity
                 if self.game.check_destination(destination):
                     if piece.can_move(self.game, origin, destination):
                         valid_moves.append(destination)
@@ -196,6 +198,7 @@ class ChessLikeGUI:
         """
         square = self.get_square_from_mouse(pos)
 
+        # Handles click of Rules button
         if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
             self.show_rules = True
             return
@@ -204,12 +207,15 @@ class ChessLikeGUI:
             self.show_rules = False
             return
 
+        # if a valid square has been selected
         if square is not None:
+            # If a piece has not been selected yet
             if self.selected_square is None:
                 piece = self.game.get_piece(square)
                 if piece is not None and piece.get_color() == self.game.get_turn():
                     self.selected_square = square
                     self.valid_moves = self.get_valid_moves(square)
+            # If a piece has been selected already, make the move
             else:
                 self.game.make_move(self.selected_square, square)
                 self.selected_square = None
@@ -237,6 +243,8 @@ class ChessLikeGUI:
                     color = self.BLACK 
 
                 pygame.draw.rect(self.screen, color, (x, y, self.SQUARE_SIZE, self.SQUARE_SIZE))
+
+                # Draw highlight overlay
 
                 if self.selected_square is not None and self.square_to_pos(self.selected_square) == (column, row):
                     self.screen.blit(transparency, (x, y))
