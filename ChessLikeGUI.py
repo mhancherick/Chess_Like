@@ -51,6 +51,10 @@ class ChessLikeGUI:
         self.valid_moves = []
         self.show_rules = False
 
+        # UI
+        self.rules_button_text = self.info_font.render("Rules", True, (0, 0, 0))
+        self.rules_button_rect = self.rules_button_text.get_rect(topright=(self.WINDOW_WIDTH - 10, 10))
+
     def run_game(self):
         """
         The main game loop
@@ -181,9 +185,15 @@ class ChessLikeGUI:
 
     def handle_click(self, pos):
         """
-        Handles click events by selecting a piece or triggering a move
+        Handles click events by selecting a piece, triggering a move, or showing the rules popup
         """
         square = self.get_square_from_mouse(pos)
+
+        if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
+            self.show_rules = True
+
+        elif self.show_rules:
+            self.show_rules = False
 
         if square is not None:
             if self.selected_square is None:
@@ -246,10 +256,9 @@ class ChessLikeGUI:
             title_rect = title_text.get_rect(center=(self.WINDOW_WIDTH // 2, 20))
             self.screen.blit(title_text, title_rect)
 
-        button_text = self.info_font.render("Rules", True, (0,0,0))
-        self.rules_button_rect = button_text.get_rect(topright=(self.WINDOW_WIDTH - 10, 10))
+        # Draws the rules button
         pygame.draw.rect(self.screen, (200, 200, 200), self.rules_button_rect.inflate(10, 5))
         pygame.draw.rect(self.screen, (0, 0, 0), self.rules_button_rect.inflate(10, 5), 2)
 
-        self.screen.blit(button_text, self.rules_button_rect)
+        self.screen.blit(self.rules_button_text, self.rules_button_rect)
         
