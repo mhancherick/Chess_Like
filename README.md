@@ -1,4 +1,4 @@
-Transportation ChessLike
+Transportation Chess
 
 Transportation Chess is a two-player strategy game where you command vehicles on a 7x7 board. To win, capture the opponent's bike (the most powerful of all transportation types).
 
@@ -31,3 +31,17 @@ Train
 Helicopter
 
     Movement: Jumps exactly two squares diagonally
+
+Installation & Running
+
+Requirements
+Python 3.x
+pygame
+
+Setup
+
+git clone https://github.com/mhancherick/Chess_Like
+
+pip install pygame
+
+python PlayChessLike.py
