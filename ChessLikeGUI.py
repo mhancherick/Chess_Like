@@ -213,10 +213,13 @@ class ChessLikeGUI:
 
         if self.rules_button_rect.collidepoint(pos) and not self.show_rules:
             self.show_rules = True
-        elif self.show_rules:
+            return
+        
+        if self.show_rules:
             self.show_rules = False
+            return
 
-        if square is not None:
+        if square is not None and not self.show_rules:
             if self.selected_square is None:
                 piece = self.game.get_piece(square)
                 if piece is not None and piece.get_color() == self.game.get_turn():
